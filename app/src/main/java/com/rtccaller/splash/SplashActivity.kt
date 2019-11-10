@@ -1,4 +1,4 @@
-package com.anuntis.rtccaller.displays.splash
+package com.rtccaller.splash
 
 import android.app.AppComponentFactory
 
