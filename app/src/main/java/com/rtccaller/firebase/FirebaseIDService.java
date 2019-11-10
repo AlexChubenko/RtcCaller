@@ -2,10 +2,19 @@ package com.rtccaller.firebase;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.iid.FirebaseInstanceIdReceiver;
+import com.google.firebase.inappmessaging.FirebaseInAppMessagingClickListener;
+import com.google.firebase.inappmessaging.model.Action;
+import com.google.firebase.inappmessaging.model.InAppMessage;
 
 
-//public class FirebaseIDService extends FirebaseInstanceIdReceiver() {
+public class FirebaseIDService implements FirebaseInAppMessagingClickListener {
+    @Override
+    public void messageClicked(@NonNull InAppMessage inAppMessage, @NonNull Action action) {
+
+    }
 //    private static final String TAG = "FirebaseIDService";
 //    PreferenceHelper helper;
 //
@@ -19,4 +28,4 @@ import com.google.firebase.iid.FirebaseInstanceIdReceiver;
 //
 //    }
 
-//}
+}
