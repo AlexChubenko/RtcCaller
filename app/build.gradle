@@ -162,28 +162,35 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     // Firebase
-//    implementation platform('com.google.firebase:firebase-bom:17.0.0')
-//
-//    implementation "com.google.firebase:firebase-core:17.2.0"
-//    implementation 'com.google.firebase:firebase-database:19.1.0'
-//    implementation 'com.google.firebase:firebase-storage:19.0.1'
-//    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation platform('com.google.firebase:firebase-bom:17.0.0')
+
+    implementation "com.google.firebase:firebase-core:17.2.1"
+    implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.google.firebase:firebase-auth:19.1.0'
 
     // Firebase UI
-//    implementation 'com.firebaseui:firebase-ui-database:4.2.0'
+    implementation 'com.firebaseui:firebase-ui-database:4.2.0'
 
     // add the Firebase SDK for Google Analytics
-//    implementation 'com.google.firebase:firebase-analytics:17.2.0'
-//    implementation "com.google.firebase:firebase-auth:19.0.0"
-//    implementation'com.android.support:support-fragment:26.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation "com.google.firebase:firebase-auth:19.1.0"
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-iid:20.0.0'
+    implementation 'com.google.firebase:firebase-inappmessaging-display:19.0.1'
+    implementation 'com.google.firebase:firebase-analytics:17.2.1'
 
 
+
+    implementation'com.android.support:support-fragment:28.0.0'
     implementation 'io.pristine:libjingle:11139'
 
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:0.3.2"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:0.3.2"
 
     compile fileTree(dir:'libs', include: ['*.jar'])
+
+//    implementation 'org.webrtc:google-webrtc:1.0.22920'//1.0.23430'
 }
 
 apply plugin: 'com.google.gms.google-services'

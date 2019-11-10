@@ -48,7 +48,7 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
         return fragmentAndroidInjector
     }
 
-    override fun getEmptyCellActivityIntent() = Intent(this, CallActivity.javaClass)
+    override fun getEmptyCellActivityIntent() = Intent(this, CallActivity::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,17 +75,17 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
         roomListView = findViewById<View>(R.id.room_listview) as ListView
         roomListView.setEmptyView(findViewById<View>(android.R.id.empty))
         roomListView.setOnItemClickListener { adapterView, view, i, l ->
-            val roomId = (view as TextView).text.toString()
+            val roomId = (view as TextView).getText().toString()
             connectToRoom(roomId, false, false, false,
                 0)
         }
         registerForContextMenu(roomListView)
         connectButton = findViewById<View>(R.id.connect_button) as ImageButton
-        connectButton.setOnClickListener { connectToRoom(roomEditText.text.toString(),false, false, false,
+        connectButton.setOnClickListener { connectToRoom(roomEditText.getText().toString(),false, false, false,
             0) }
         addFavoriteButton = findViewById<View>(R.id.add_favorite_button) as ImageButton
         addFavoriteButton.setOnClickListener {
-            val newRoom = roomEditText.text.toString()
+            val newRoom = roomEditText.getText().toString()
             if (newRoom.length > 0 && !roomList.contains(newRoom)) {
                 adapter.add(newRoom)
                 adapter.notifyDataSetChanged()
@@ -93,11 +93,14 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
         }
     }
 
-    private fun connectToRoom(roomIdP: String, commandLineRun: Boolean, loopback: Boolean,
+    private fun connectToRoom(roomIdP: String?, commandLineRun: Boolean, loopback: Boolean,
                               useValuesFromIntent: Boolean, runTimeMs: Int){
         contactsLifecycleDelegate
             .getRoomConnectionIntent(roomIdP, commandLineRun, loopback, useValuesFromIntent,
-                runTimeMs)?.let{startActivityForResult(it, CONNECTION_REQUEST)}
+                runTimeMs)?.let{
+
+                startActivityForResult(it, CONNECTION_REQUEST)
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -140,7 +143,8 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
 //            startActivity(intent)
 //            return true
 //        } else if (item.itemId == R.id.action_loopback) {
-            connectToRoom("", false, true, false, 0)
+        Log.d(TAG, "onOptionsItemSelected()")
+            connectToRoom(null, false, true, false, 0)
             return true
 //        } else {
 //            return super.onOptionsItemSelected(item)
@@ -149,7 +153,7 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
     }
     public override fun onPause() {
         super.onPause()
-        val room = roomEditText.text.toString()
+        val room = roomEditText.getText().toString()
         val roomListJson = JSONArray(roomList).toString()
         val editor = sharedPref.edit()
         editor.putString(keyprefRoom, room)

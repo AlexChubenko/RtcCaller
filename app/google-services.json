@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "21264661890",
-    "firebase_url": "https://my-project6-1555068603328.firebaseio.com",
-    "project_id": "my-project6-1555068603328",
-    "storage_bucket": "my-project6-1555068603328.appspot.com"
+    "project_number": "1063893712981",
+    "firebase_url": "https://rtc-caller.firebaseio.com",
+    "project_id": "rtc-caller",
+    "storage_bucket": "rtc-caller.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:21264661890:android:f313488f99f84ed87de39b",
+        "mobilesdk_app_id": "1:1063893712981:android:ffd3ddfbce6f9e9ed614dc",
         "android_client_info": {
           "package_name": "com.rtccaller"
         }
       },
       "oauth_client": [
         {
-          "client_id": "21264661890-i5h7jbhosebtoq16bkb3qqopc2hm060f.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.rtccaller",
-            "certificate_hash": "9d7322228f393f4cfa969e31f5121f61d3e36cc4"
-          }
-        },
-        {
-          "client_id": "21264661890-mp0im7004huqleeo0747tq94kl8f15ei.apps.googleusercontent.com",
+          "client_id": "1063893712981-jnj3gq66maotfrkv337j2vgki5pj8vsg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBDYV1njtNbjaHVO7xh3YlgWkTYfXIe4bE"
+          "current_key": "AIzaSyASXY3YK_h3r2tqyNAGlOD7udT47F8h9EQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "21264661890-mp0im7004huqleeo0747tq94kl8f15ei.apps.googleusercontent.com",
+              "client_id": "1063893712981-jnj3gq66maotfrkv337j2vgki5pj8vsg.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
