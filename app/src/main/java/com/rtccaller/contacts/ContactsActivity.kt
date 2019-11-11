@@ -19,6 +19,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.anuntis.rtccaller.R
 import com.rtccaller.call.CallActivity
 import com.rtccaller.utils.ContactsLifecycleDelegate
+import com.rtccaller.utils.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
@@ -48,15 +49,10 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
         return fragmentAndroidInjector
     }
 
-    override fun getEmptyCellActivityIntent() = Intent(this, CallActivity::class.java)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false)
-        sharedPref = PreferenceManager
-            .getDefaultSharedPreferences(this)
         contactsLifecycleDelegate =
-            ContactsLifecycleDelegate(sharedPref, this)
+            ContactsLifecycleDelegate(this)
         setContentView(R.layout.activity_contacts)
         ProcessLifecycleOwner.get().lifecycle.addObserver(contactsLifecycleDelegate)
         initViews()
@@ -95,9 +91,8 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
 
     private fun connectToRoom(roomIdP: String?, commandLineRun: Boolean, loopback: Boolean,
                               useValuesFromIntent: Boolean, runTimeMs: Int){
-        contactsLifecycleDelegate
-            .getRoomConnectionIntent(roomIdP, commandLineRun, loopback, useValuesFromIntent,
-                runTimeMs)?.let{
+        getRoomConnectionIntent(roomIdP, commandLineRun, loopback, useValuesFromIntent,
+                runTimeMs, this)?.let{
 
                 startActivityForResult(it, CONNECTION_REQUEST)
             }
@@ -192,23 +187,6 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
             commandLineRun = false
             finish()
         }
-    }
-
-    override fun validateUrl(url: String): Boolean {
-        if (URLUtil.isHttpsUrl(url) || URLUtil.isHttpUrl(url)) {
-            return true
-        }
-
-        AlertDialog.Builder(this)
-            .setTitle(getText(R.string.invalid_url_title))
-            .setMessage(getString(R.string.invalid_url_text, url))
-            .setCancelable(false)
-            .setNeutralButton(
-                R.string.ok
-            ) { dialog, id -> dialog.cancel() }
-            .create()
-            .show()
-        return false
     }
 
     companion object{
