@@ -1,7 +1,6 @@
 package com.rtccaller.utils
 
 import android.app.AlertDialog
-import android.app.AppComponentFactory
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,54 +8,51 @@ import android.net.Uri
 import android.preference.PreferenceManager
 import android.util.Log
 import android.webkit.URLUtil
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.anuntis.rtccaller.R
-import com.rtccaller.call.CallActivity
-import com.rtccaller.call.CallLifecycleDelegate.Companion
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_AECDUMP_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_AUDIOCODEC
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_AUDIO_BITRATE
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_CAMERA2
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_CAPTURETOTEXTURE_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_CMDLINE
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_DATA_CHANNEL_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_DISABLE_BUILT_IN_AEC
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_DISABLE_BUILT_IN_AGC
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_DISABLE_BUILT_IN_NS
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_DISABLE_WEBRTC_AGC_AND_HPF
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_DISPLAY_HUD
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_ENABLE_LEVEL_CONTROL
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_FLEXFEC_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_HWCODEC_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_ID
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_LOOPBACK
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_MAX_RETRANSMITS
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_MAX_RETRANSMITS_MS
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_NEGOTIATED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_NOAUDIOPROCESSING_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_OPENSLES_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_ORDERED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_PROTOCOL
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_ROOMID
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_RUNTIME
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_WIDTH
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_SCREENCAPTURE
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_TRACING
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEOCODEC
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_BITRATE
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_CALL
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_CAPTUREQUALITYSLIDER_ENABLED
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_FILE_AS_CAMERA
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_FPS
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_HEIGHT
-import com.rtccaller.call.CallLifecycleDelegate.Companion.EXTRA_VIDEO_WIDTH
+import com.rtccaller.call.CallActivity2
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_AECDUMP_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_AUDIOCODEC
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_AUDIO_BITRATE
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_CAMERA2
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_CAPTURETOTEXTURE_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_CMDLINE
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DATA_CHANNEL_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DISABLE_BUILT_IN_AEC
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DISABLE_BUILT_IN_AGC
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DISABLE_BUILT_IN_NS
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DISABLE_WEBRTC_AGC_AND_HPF
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DISPLAY_HUD
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_ENABLE_LEVEL_CONTROL
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_FLEXFEC_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_HWCODEC_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_ID
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_LOOPBACK
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_MAX_RETRANSMITS
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_MAX_RETRANSMITS_MS
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_NEGOTIATED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_NOAUDIOPROCESSING_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_OPENSLES_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_ORDERED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_PROTOCOL
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_ROOMID
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_RUNTIME
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_WIDTH
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_SCREENCAPTURE
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_TRACING
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEOCODEC
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_BITRATE
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_CALL
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_CAPTUREQUALITYSLIDER_ENABLED
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_FILE_AS_CAMERA
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_FPS
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_HEIGHT
+import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_WIDTH
 import java.util.*
 
 class ContactsLifecycleDelegate(val preferencesReader: PreferencesReader): LifecycleObserver {
@@ -369,7 +365,7 @@ class ContactsLifecycleDelegate(val preferencesReader: PreferencesReader): Lifec
             Log.d(TAG, "Connecting to room $roomId at URL $roomUrl")
             if (validateUrl(roomUrl, context)) {
                 val uri = Uri.parse(roomUrl)
-                val intent = Intent(context, CallActivity::class.java)
+                val intent = Intent(context, CallActivity2::class.java)
                 intent.setData(uri)
                 intent.putExtra(EXTRA_ROOMID, roomId)
                 intent.putExtra(EXTRA_LOOPBACK, loopback)

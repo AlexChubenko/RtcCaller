@@ -1,9 +1,7 @@
 package com.rtccaller.contacts
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -12,12 +10,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.webkit.URLUtil
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.anuntis.rtccaller.R
-import com.rtccaller.call.CallActivity
 import com.rtccaller.utils.ContactsLifecycleDelegate
 import com.rtccaller.utils.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
 import dagger.android.AndroidInjector
@@ -25,7 +22,7 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import org.json.JSONArray
 import org.json.JSONException
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, ContactsLifecycleDelegate.PreferencesReader {
@@ -54,6 +51,7 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
         contactsLifecycleDelegate =
             ContactsLifecycleDelegate(this)
         setContentView(R.layout.activity_contacts)
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(contactsLifecycleDelegate)
         initViews()
     }
@@ -148,7 +146,7 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
     }
     public override fun onPause() {
         super.onPause()
-        val room = roomEditText.getText().toString()
+        val room = roomEditText.text.toString()
         val roomListJson = JSONArray(roomList).toString()
         val editor = sharedPref.edit()
         editor.putString(keyprefRoom, room)
@@ -180,6 +178,7 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
             roomListView.setItemChecked(0, true)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CONNECTION_REQUEST && commandLineRun) {
             Log.d(TAG, "Return: $resultCode")

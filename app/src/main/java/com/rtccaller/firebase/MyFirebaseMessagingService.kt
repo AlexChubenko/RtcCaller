@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat
 import com.anuntis.rtccaller.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.rtccaller.call.CallActivity
+import com.rtccaller.call.CallActivity2
 import java.util.*
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -24,7 +24,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
 //        todo add move getCallActivityIntentCreation to CompanionObject
-        val intent = Intent(this, CallActivity::class.java)
+        val intent = Intent(this, CallActivity2::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random().nextInt(3000)
 

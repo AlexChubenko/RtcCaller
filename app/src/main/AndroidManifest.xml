@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.rtccaller.call.CallActivity"
+            android:name="com.rtccaller.call.CallActivity2"
             android:label="@string/app_name"
             android:screenOrientation="fullUser"
             android:configChanges="orientation|screenSize"
