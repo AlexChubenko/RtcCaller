@@ -1,6 +1,6 @@
 package com.rtccaller.di.modules
 
-import com.rtccaller.call.CallActivity2
+import com.rtccaller.displays.call.CallActivity2
 import com.rtccaller.di.components.ActivityScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

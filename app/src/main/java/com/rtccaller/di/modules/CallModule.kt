@@ -1,13 +1,12 @@
 package com.rtccaller.di.modules
 
 import android.util.Log
-import com.rtccaller.call.CallActivity2
-import com.rtccaller.call.CallIntentParameters
+import com.rtccaller.displays.call.CallActivity2
+import com.rtccaller.displays.call.CallIntentParameters
 import com.rtccaller.di.components.ActivityScope
-import com.rtccaller.utils.PeerConnectionClient
+import com.rtccaller.services.PeerConnectionClient
 import dagger.Module
 import dagger.Provides
-import dagger.android.ContributesAndroidInjector
 import org.webrtc.PeerConnectionFactory
 
 @Module

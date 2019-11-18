@@ -1,11 +1,6 @@
 package com.rtccaller.di.components
 
 
-import com.rtccaller.di.modules.CallModule
-import com.rtccaller.call.CallActivity2
-import dagger.BindsInstance
-import dagger.Component
-import dagger.android.AndroidInjector
 import java.lang.annotation.Documented
 import javax.inject.Scope
 //

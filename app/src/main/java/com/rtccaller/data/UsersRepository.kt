@@ -6,8 +6,8 @@ import android.app.job.JobService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.rtccaller.utils.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
-import com.rtccaller.utils.NotificationFactory.Companion.getStandardNotification
+import com.rtccaller.displays.contacts.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
+import com.rtccaller.services.NotificationFactory.Companion.getStandardNotification
 
 
 class UsersRepository: JobService() {
