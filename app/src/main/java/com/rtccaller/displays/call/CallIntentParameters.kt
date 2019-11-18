@@ -41,6 +41,7 @@ public class CallIntentParameters(val intent: Intent) {
     val runTimeMs = intent.getIntExtra(EXTRA_RUNTIME, 0)
     val urlParameters = intent.getStringExtra(EXTRA_URLPARAMETERS)
     val videoFileAsCamera = intent.getStringExtra(EXTRA_VIDEO_FILE_AS_CAMERA)
+    val dataCahanelEnabled = intent.getBooleanExtra(EXTRA_DATA_CHANNEL_ENABLED, false)
 
     companion object {
         public val EXTRA_ROOMID = "org.appspot.apprtc.ROOMID"

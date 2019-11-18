@@ -10,10 +10,14 @@
 
 package com.rtccaller.services;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.webrtc.AudioSource;
 import org.webrtc.AudioTrack;
 import org.webrtc.CameraVideoCapturer;
@@ -377,7 +381,9 @@ public class PeerConnectionClient {
   }
 
   private void createPeerConnectionFactoryInternal(Context context) {
-    PeerConnectionFactory.initializeInternalTracer();
+//    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(((Activity) context) ));
+      PeerConnectionFactory.initializeInternalTracer();
+
     if (peerConnectionParameters.tracing) {
       PeerConnectionFactory.startInternalTracingCapture(
           Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator

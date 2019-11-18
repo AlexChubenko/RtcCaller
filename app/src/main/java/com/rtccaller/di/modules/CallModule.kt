@@ -19,7 +19,8 @@ class CallModule {
 
     @Provides
     @ActivityScope
-    fun getPeerConnectionParameters(intentParameters: CallIntentParameters, peerConnectionParameters: PeerConnectionClient.DataChannelParameters)
+    fun getPeerConnectionParameters(intentParameters: CallIntentParameters, peerConnectionParameters: PeerConnectionClient.DataChannelParameters?):
+            PeerConnectionClient.PeerConnectionParameters
             = PeerConnectionClient.PeerConnectionParameters(intentParameters.videoCall,
         intentParameters.loopback, intentParameters.tracing, intentParameters.videoWidth,
         intentParameters.videoHeight, intentParameters.videoFps, intentParameters.videoBitrate,
@@ -40,12 +41,14 @@ class CallModule {
 
     @Provides
     @ActivityScope
-    fun getDataChannelParameters(intentParameters: CallIntentParameters): PeerConnectionClient.DataChannelParameters {
+    fun getDataChannelParameters(intentParameters: CallIntentParameters): PeerConnectionClient.DataChannelParameters? {
         Log.d(TAG, "getDataChannelParameters()")
-        return PeerConnectionClient.DataChannelParameters(intentParameters.ordered,
+        return if(intentParameters.dataCahanelEnabled){
+            PeerConnectionClient.DataChannelParameters(intentParameters.ordered,
             intentParameters.maxRentransmitsMs, intentParameters.maxRentransmits,
             intentParameters.protocol, intentParameters.negotiated, intentParameters.id
-        )
+        )}
+        else null
     }
 
     @Provides
@@ -63,7 +66,7 @@ class CallModule {
             peerConnectionClient.setPeerConnectionFactoryOptions(options)
         }
         peerConnectionClient.createPeerConnectionFactory(
-            activity.getApplicationContext(), peerConnectionParameters, activity
+            activity.applicationContext, peerConnectionParameters, activity
         )
         return peerConnectionClient
     }

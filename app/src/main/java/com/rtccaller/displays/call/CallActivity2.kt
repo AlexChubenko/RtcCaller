@@ -189,43 +189,38 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
             setSwappedFeeds(true /* isSwappedFeeds */)
 
          // Check for mandatory permissions.
-            for (permission in MANDATORY_PERMISSIONS)
-        {
-        if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED)
-        {
-        logAndToast("Permission $permission is not granted")
-        setResult(RESULT_CANCELED)
-        finish()
-        return
-        }
+        for (permission in MANDATORY_PERMISSIONS) {
+            if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                logAndToast("Permission $permission is not granted")
+                setResult(RESULT_CANCELED)
+                finish()
+                return
+            }
         }
 
          //todo move to delegate
             val roomUri = intent.data
-        if (roomUri == null)
-        {
-        logAndToast(getString(R.string.missing_url))
-        Log.e(TAG, "Didn't get any URL in intent!")
-        setResult(RESULT_CANCELED)
-        finish()
-        return
-        }
+        if (roomUri == null) {
+            logAndToast(getString(R.string.missing_url))
+            Log.e(TAG, "Didn't get any URL in intent!")
+            setResult(RESULT_CANCELED)
+            finish()
+            return }
 
          // Get Intent parameters.
 
-            Log.d(TAG, "Room ID: " + intentParameters.roomId)
-        if (intentParameters.roomId == null || intentParameters.roomId.isEmpty())
-        {
-        logAndToast(getString(R.string.missing_url))
-        Log.e(TAG, "Incorrect room ID in intent!")
-        setResult(RESULT_CANCELED)
-        finish()
-        return
+        Log.d(TAG, "Room ID: " + intentParameters.roomId)
+        if (intentParameters.roomId == null || intentParameters.roomId.isEmpty()) {
+            logAndToast(getString(R.string.missing_url))
+            Log.e(TAG, "Incorrect room ID in intent!")
+            setResult(RESULT_CANCELED)
+            finish()
+            return
         }
 
 
          // If capturing format is not specified for screencapture, use screen resolution.
-            if (screencaptureEnabled && intentParameters.videoWidth == 0 && intentParameters.videoHeight == 0)
+          if (screencaptureEnabled && intentParameters.videoWidth == 0 && intentParameters.videoHeight == 0)
         {
         val displayMetrics = getDisplayMetrics()
         intentParameters.videoWidth = displayMetrics.widthPixels
@@ -258,13 +253,10 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         (Handler()).postDelayed({ disconnect() }, runTimeMs.toLong())
         }
 
-        if (screencaptureEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-        startScreenCapture()
-        }
-        else
-        {
-        startCall()
+        if (screencaptureEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startScreenCapture() }
+        else {
+            startCall()
         }
     }
 
