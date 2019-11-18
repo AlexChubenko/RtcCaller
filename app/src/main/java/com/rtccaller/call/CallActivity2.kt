@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog
 
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.anuntis.rtccaller.R
 import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_CAMERA2
@@ -28,15 +29,25 @@ import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_FILE_AS_CAM
 import com.rtccaller.utils.*
 import dagger.Provides
 import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+
 import org.webrtc.*
 import java.io.IOException
 import java.util.ArrayList
 import javax.inject.Inject
 
 
-class CallActivity2: AppCompatActivity(), AppRTCClient.SignalingEvents,
+class CallActivity2: AppCompatActivity()/*, HasSupportFragmentInjector*/, AppRTCClient.SignalingEvents,
     PeerConnectionClient.PeerConnectionEvents,
     CallFragment.OnCallEvents {
+
+//    @set:Inject
+//    internal var fragmentAndroidInjector: DispatchingAndroidInjector<Fragment>? = null
+//
+//    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
+//        return fragmentAndroidInjector
+//    }
 
     companion object{
         internal val TAG = CallActivity2::class.java.simpleName

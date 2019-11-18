@@ -19,13 +19,12 @@ import com.rtccaller.utils.ContactsLifecycleDelegate
 import com.rtccaller.utils.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.*
 import javax.inject.Inject
 
-class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, ContactsLifecycleDelegate.PreferencesReader {
+class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.PreferencesReader {
 
     //todo inject with Dagger
     private lateinit var contactsLifecycleDelegate: ContactsLifecycleDelegate
@@ -39,12 +38,12 @@ class ContactsActivity : AppCompatActivity(), HasSupportFragmentInjector, Contac
     private var keyprefRoom: String? = null
     private var keyprefRoomList: String? = null
 
-    @set:Inject
-    internal var fragmentAndroidInjector: DispatchingAndroidInjector<Fragment>? = null
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-        return fragmentAndroidInjector
-    }
+//    @set:Inject
+//    internal var fragmentAndroidInjector: DispatchingAndroidInjector<Fragment>? = null
+//
+//    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
+//        return fragmentAndroidInjector
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

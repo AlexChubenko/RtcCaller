@@ -1,30 +1,23 @@
 package com.example.myapplication6.di.components
 
-//import com.example.myapplication6.di.modules.APPModule
-//import com.example.myapplication6.di.builder.ActivityBuilderModule
-//
-//import android.app.Application
-//
-//import javax.inject.Singleton
-//
-//import dagger.BindsInstance
-//import dagger.Component
-//import dagger.android.AndroidInjectionModule
-//import dagger.android.AndroidInjector
-//
-//@Singleton
-//@Component(modules = [APPModule::class, AndroidInjectionModule::class, ActivityBuilderModule::class])
-//interface AppComponent : AndroidInjector<WeatherApp> {
-//
+import com.example.myapplication6.di.modules.CallModule
+import com.rtccaller.RTCApplication
+import com.rtccaller.call.CallActivity2
+import dagger.BindsInstance
+import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.support.AndroidSupportInjectionModule
+import javax.inject.Singleton
+
+@Singleton
+@Component(modules = [ AndroidSupportInjectionModule::class, CallModule::class])
+interface AppComponent: AndroidInjector<RTCApplication>
+//{
 //    @Component.Builder
 //    interface Builder {
 //        @BindsInstance
-//        fun application(application: Application): Builder
+//        fun rtcApplication(rtcApplication: RTCApplication): AppComponent.Builder
 //
 //        fun build(): AppComponent
-//
-////        fun factory(): MyWorkerFactory
 //    }
-//
-//    override fun inject(weatherApp: WeatherApp)
 //}

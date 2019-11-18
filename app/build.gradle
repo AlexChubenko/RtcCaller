@@ -100,11 +100,11 @@ dependencies {
     kapt 'androidx.lifecycle:lifecycle-compiler:2.0.0'
 //    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
-    implementation 'com.google.dagger:dagger-android:2.22'
-    implementation 'com.google.dagger:dagger-android-support:2.22'
+    implementation 'com.google.dagger:dagger-android:2.24'
+    implementation 'com.google.dagger:dagger-android-support:2.24'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    kapt 'com.google.dagger:dagger-compiler:2.22'
-    kapt 'com.google.dagger:dagger-android-processor:2.22'
+    kapt 'com.google.dagger:dagger-compiler:2.24'
+    kapt 'com.google.dagger:dagger-android-processor:2.24'
 
 //    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 

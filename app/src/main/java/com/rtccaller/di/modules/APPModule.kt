@@ -24,12 +24,6 @@ class APPModule {
         return HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     }
 
-//    @Provides
-//    @Singleton
-//    fun getApiRequester(retrofit: Retrofit): APIRequester {
-//        Log.d(TAG, "getDataChannelParameters()")
-//        return retrofit.create(APIRequester::class.java)
-//    }
 
     @Provides
     @Singleton
