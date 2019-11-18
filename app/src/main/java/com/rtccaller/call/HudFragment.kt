@@ -21,10 +21,11 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 import com.anuntis.rtccaller.R
-import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_DISPLAY_HUD
-import com.rtccaller.call.CallIntentParameters.Companion.EXTRA_VIDEO_CALL
-import com.rtccaller.utils.CpuMonitor
-import com.rtccaller.utils.PeerConnectionClient
+import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_DISPLAY_HUD
+import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_VIDEO_CALL
+import com.rtccaller.services.CpuMonitor
+import com.rtccaller.services.PeerConnectionClient
+
 
 import org.webrtc.StatsReport
 
