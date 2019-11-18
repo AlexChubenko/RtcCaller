@@ -1,20 +1,14 @@
-package com.example.myapplication6.di.modules
+package com.rtccaller.di.modules
 
-import android.content.Intent
 import android.util.Log
-import com.example.myapplication6.di.components.ActivityScope
 import com.rtccaller.call.CallActivity2
 import com.rtccaller.call.CallIntentParameters
+import com.rtccaller.di.components.ActivityScope
 import com.rtccaller.utils.PeerConnectionClient
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import dagger.android.ContributesAndroidInjector
 import org.webrtc.PeerConnectionFactory
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 class CallModule {

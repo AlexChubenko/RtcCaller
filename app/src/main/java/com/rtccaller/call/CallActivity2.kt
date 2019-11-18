@@ -31,6 +31,7 @@ import dagger.Provides
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.DaggerAppCompatActivity
 
 import org.webrtc.*
 import java.io.IOException
@@ -38,7 +39,7 @@ import java.util.ArrayList
 import javax.inject.Inject
 
 
-class CallActivity2: AppCompatActivity()/*, HasSupportFragmentInjector*/, AppRTCClient.SignalingEvents,
+class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, AppRTCClient.SignalingEvents,
     PeerConnectionClient.PeerConnectionEvents,
     CallFragment.OnCallEvents {
 
