@@ -185,6 +185,10 @@ dependencies {
     compileOnly "com.squareup.inject:assisted-inject-annotations-dagger2:0.3.2"
     kapt "com.squareup.inject:assisted-inject-processor-dagger2:0.3.2"
     implementation 'com.google.guava:guava:27.0.1-android'
+    implementation 'org.webrtc:google-webrtc:1.0.20849'
+//    implementation 'io.pristine:libjingle:7113'
+//    implementation 'io.pristine:libjingle-peerconnection-so:6888'
+
 
     compile fileTree(dir:'libs', include: ['*.jar'])
 }
