@@ -13,7 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ProcessLifecycleOwner
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 import com.rtccaller.displays.contacts.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
 import org.json.JSONArray
 import org.json.JSONException
@@ -30,8 +30,8 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
     private lateinit var roomList: ArrayList<String>
     private lateinit var adapter: ArrayAdapter<String>
     private lateinit var sharedPref: SharedPreferences
-    private var keyprefRoom: String? = null
-    private var keyprefRoomList: String? = null
+    private lateinit var keyprefRoom: String
+    private lateinit var keyprefRoomList: String
 
 //    @set:Inject
 //    internal var fragmentAndroidInjector: DispatchingAndroidInjector<Fragment>? = null
@@ -42,6 +42,9 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        keyprefRoom = getString(R.string.pref_room_key)
+        keyprefRoomList= getString(R.string.pref_room_list_key)
+
         contactsLifecycleDelegate =
             ContactsLifecycleDelegate(this)
         setContentView(R.layout.activity_contacts)
@@ -77,7 +80,9 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
         connectButton.setOnClickListener {
             Log.d(TAG, "aChube roomEditText.text.toString(): ${roomEditText.text.toString()}")
             connectToRoom(roomEditText.text.toString(),false, false, false,
-            0) }
+            0)
+        }
+
         addFavoriteButton = findViewById<View>(R.id.add_favorite_button) as ImageButton
         addFavoriteButton.setOnClickListener {
             val newRoom = roomEditText.text.toString()
@@ -148,9 +153,12 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
     }
     public override fun onPause() {
         super.onPause()
+        //todo check this
         val room = roomEditText.text.toString()
         val roomListJson = JSONArray(roomList).toString()
         val editor = sharedPref.edit()
+        Log.d(TAG, "aChub onPause() keyprefRoom: $keyprefRoom sroomEditText.text.toString(): ${roomEditText.text.toString()}")
+
         editor.putString(keyprefRoom, room)
         editor.putString(keyprefRoomList, roomListJson)
         editor.commit()
@@ -159,6 +167,7 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
     public override fun onResume() {
         super.onResume()
         val room = sharedPref.getString(keyprefRoom, "")
+        Log.d(TAG, "aChub onResume() keyprefRoom $keyprefRoom sharedPref.getString(keyprefRoom, \"\"): ${sharedPref.getString(keyprefRoom, "")}")
         roomEditText.setText(room)
         roomList = ArrayList()
         val roomListJson = sharedPref.getString(keyprefRoomList, null)

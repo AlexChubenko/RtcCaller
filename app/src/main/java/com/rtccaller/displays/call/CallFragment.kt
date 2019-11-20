@@ -20,7 +20,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 
 import org.webrtc.RendererCommon.ScalingType
 

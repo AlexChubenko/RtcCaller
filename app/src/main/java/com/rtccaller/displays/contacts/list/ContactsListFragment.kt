@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 

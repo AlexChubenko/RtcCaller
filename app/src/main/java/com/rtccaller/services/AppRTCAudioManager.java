@@ -22,7 +22,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.anuntis.rtccaller.R;
+import com.rtccaller.R;
 
 import org.webrtc.ThreadUtils;
 

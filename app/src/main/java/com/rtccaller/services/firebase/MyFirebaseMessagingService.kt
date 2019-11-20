@@ -11,7 +11,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.rtccaller.displays.call.CallActivity2

@@ -1,5 +1,6 @@
 package com.rtccaller.displays.call
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Context
@@ -17,10 +18,12 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
 
 import androidx.fragment.app.FragmentTransaction
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_CAMERA2
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_CAPTURETOTEXTURE_ENABLED
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_VIDEO_FILE_AS_CAMERA
@@ -49,6 +52,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         internal val TAG = CallActivity2::class.java.simpleName
 
         internal const val CAPTURE_PERMISSION_REQUEST_CODE = 1
+        private const val CAMERA_AUDIO_PERMISSION_REQUEST = 11
 
         internal val MANDATORY_PERMISSIONS = arrayOf(
             "android.permission.MODIFY_AUDIO_SETTINGS",
@@ -121,6 +125,8 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
     private var hudFragment: HudFragment? = null
     private var cpuMonitor: CpuMonitor? = null
 
+    private var arePermissionsGranted = false
+
       public override fun onCreate(savedInstanceState: Bundle?) {
           AndroidInjection.inject(this)
 
@@ -132,8 +138,8 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
             requestWindowFeature(Window.FEATURE_NO_TITLE)
         window.addFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-            or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+//            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+//            or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
          //todo keep this for checking CallActivity visibility
          //    getWindow().getDecorView().setSystemUiVisibility(getSystemUiVisibility());
@@ -145,8 +151,8 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
          // Create UI controls.
             pipRenderer = findViewById<View>(R.id.pip_video_view) as SurfaceViewRenderer
         fullscreenRenderer = findViewById<View>(R.id.fullscreen_video_view) as SurfaceViewRenderer
-        callFragment = CallFragment()
-        hudFragment = HudFragment()
+//        callFragment = CallFragment()
+//        hudFragment = HudFragment()
 
          // Show/hide call control fragment on view click.
             val listener = View.OnClickListener { toggleCallControlFragmentVisibility() }
@@ -165,19 +171,17 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
 
          // When saveRemoteVideoToFile is set we save the video from the remote to a file.
-            if (intentParameters.saveRemoteVideoToFile != null)
-        {
-        try
-        {
-        videoFileRenderer = VideoFileRenderer(
-        intentParameters.saveRemoteVideoToFile, intentParameters.videoOutWidth, intentParameters.videoOutHeight, rootEglBase!!.getEglBaseContext())
-        remoteRenderers.add(videoFileRenderer!!)
-        }
-        catch (e: IOException) {
-        throw RuntimeException(
-        "Failed to open video file for output: " + intentParameters.saveRemoteVideoToFile, e)
-        }
-
+        if (intentParameters.saveRemoteVideoToFile != null)
+            {
+            try {
+                videoFileRenderer = VideoFileRenderer(
+                intentParameters.saveRemoteVideoToFile, intentParameters.videoOutWidth, intentParameters.videoOutHeight, rootEglBase!!.getEglBaseContext())
+                remoteRenderers.add(videoFileRenderer!!)
+            }
+            catch (e: IOException) {
+                throw RuntimeException(
+                    "Failed to open video file for output: " + intentParameters.saveRemoteVideoToFile, e)
+            }
         }
         fullscreenRenderer!!.init(rootEglBase!!.eglBaseContext, null)
         fullscreenRenderer!!.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
@@ -191,6 +195,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
          // Check for mandatory permissions.
         for (permission in MANDATORY_PERMISSIONS) {
             if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "aChub() checkCallingOrSelfPermission $permission")
                 logAndToast("Permission $permission is not granted")
                 setResult(RESULT_CANCELED)
                 finish()
@@ -257,6 +262,31 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
             startScreenCapture() }
         else {
             startCall()
+        }
+    }
+
+    private fun handlePermissions() {
+        val canAccessCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        val canRecordAudio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        if (!canAccessCamera || !canRecordAudio) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO), CAMERA_AUDIO_PERMISSION_REQUEST)
+        } else {
+            arePermissionsGranted = true
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        Log.w(TAG, "onRequestPermissionsResult: $requestCode $permissions $grantResults")
+        when (requestCode) {
+            CAMERA_AUDIO_PERMISSION_REQUEST -> {
+                if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+                    arePermissionsGranted = true
+//                    startVideoSession()
+                } else {
+                    finish()
+                }
+                return
+            }
         }
     }
 

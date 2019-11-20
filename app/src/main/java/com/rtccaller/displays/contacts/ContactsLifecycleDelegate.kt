@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 import com.rtccaller.displays.call.CallActivity2
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_AECDUMP_ENABLED
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_AUDIOCODEC
@@ -59,12 +59,12 @@ class ContactsLifecycleDelegate(val preferencesReader: PreferencesReader): Lifec
 
     class IntentValues(val context: Context) {
 
-        val keyprefVideoCallEnabled: String = getString(R.string.pref_videocall_key)
-        val keyprefScreencapture: String = getString(R.string.pref_screencapture_key)
-        val keyprefCamera2: String = getString(R.string.pref_camera2_key)
+//        val keyprefVideoCallEnabled: String = getString(R.string.pref_videocall_key)
+//        val keyprefScreencapture: String = getString(R.string.pref_screencapture_key)
+//        val keyprefCamera2: String = getString(R.string.pref_camera2_key)
         val keyprefResolution: String = getString(R.string.pref_resolution_key)
         val keyprefFps: String = getString(R.string.pref_fps_key)
-        val keyprefCaptureQualitySlider: String = getString(R.string.pref_capturequalityslider_key)
+//        val keyprefCaptureQualitySlider: String = getString(R.string.pref_capturequalityslider_key)
         val keyprefVideoBitrateType: String = getString(R.string.pref_maxvideobitrate_key)
         val keyprefVideoBitrateValue: String = getString(R.string.pref_maxvideobitratevalue_key)
         val keyprefVideoCodec: String = getString(R.string.pref_videocodec_key)
@@ -85,8 +85,8 @@ class ContactsLifecycleDelegate(val preferencesReader: PreferencesReader): Lifec
         val keyprefDisplayHud: String = getString(R.string.pref_displayhud_key)
         val keyprefTracing: String = getString(R.string.pref_tracing_key)
         val keyprefRoomServerUrl: String = getString(R.string.pref_room_server_url_key)
-        val keyprefRoom: String = getString(R.string.pref_room_key)
-        val keyprefRoomList: String = getString(R.string.pref_room_list_key)
+//        val keyprefRoom: String = getString(R.string.pref_room_key)
+//        val keyprefRoomList: String = getString(R.string.pref_room_list_key)
         val keyprefEnableDataChannel: String = getString(R.string.pref_enable_datachannel_key)
         val keyprefOrdered: String = getString(R.string.pref_ordered_key)
         val keyprefMaxRetransmitTimeMs: String = getString(R.string.pref_max_retransmit_time_ms_key)

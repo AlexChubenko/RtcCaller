@@ -20,7 +20,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
-import com.anuntis.rtccaller.R
+import com.rtccaller.R
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_DISPLAY_HUD
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_VIDEO_CALL
 import com.rtccaller.services.CpuMonitor

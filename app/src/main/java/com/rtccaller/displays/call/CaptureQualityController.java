@@ -13,7 +13,7 @@ package com.rtccaller.displays.call;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.anuntis.rtccaller.R;
+import com.rtccaller.R;
 
 import org.webrtc.CameraEnumerationAndroid.CaptureFormat;
 
