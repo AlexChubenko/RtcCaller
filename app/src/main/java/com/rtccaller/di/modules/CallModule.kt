@@ -66,7 +66,7 @@ class CallModule {
             peerConnectionClient.setPeerConnectionFactoryOptions(options)
         }
         peerConnectionClient.createPeerConnectionFactory(
-            activity.applicationContext, peerConnectionParameters, activity
+            activity, peerConnectionParameters, activity
         )
         return peerConnectionClient
     }

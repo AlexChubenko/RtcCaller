@@ -52,7 +52,7 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
 
     private fun initViews(){
         roomEditText = findViewById<View>(R.id.room_edittext) as EditText
-        roomEditText.setOnEditorActionListener(TextView.OnEditorActionListener { textView, i, keyEvent ->
+        roomEditText.setOnEditorActionListener(TextView.OnEditorActionListener { _, i, _ ->
             if (i == EditorInfo.IME_ACTION_DONE) {
                 addFavoriteButton.performClick()
                 return@OnEditorActionListener true
@@ -60,21 +60,28 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
             false
         })
         roomEditText.requestFocus()
+
         roomListView = findViewById<View>(R.id.room_listview) as ListView
-        roomListView.setEmptyView(findViewById<View>(android.R.id.empty))
-        roomListView.setOnItemClickListener { adapterView, view, i, l ->
-            val roomId = (view as TextView).getText().toString()
-            connectToRoom(roomId, false, false, false,
-                0)
+        roomListView.emptyView = findViewById<View>(android.R.id.empty)
+        roomListView.setOnItemClickListener { _, view, i, l ->
+            val roomId = (view as TextView).text.toString()
+            connectToRoom(roomId,
+                commandLineRun = false,
+                loopback = false,
+                useValuesFromIntent = false,
+                runTimeMs = 0
+            )
         }
         registerForContextMenu(roomListView)
         connectButton = findViewById<View>(R.id.connect_button) as ImageButton
-        connectButton.setOnClickListener { connectToRoom(roomEditText.getText().toString(),false, false, false,
+        connectButton.setOnClickListener {
+            Log.d(TAG, "aChube roomEditText.text.toString(): ${roomEditText.text.toString()}")
+            connectToRoom(roomEditText.text.toString(),false, false, false,
             0) }
         addFavoriteButton = findViewById<View>(R.id.add_favorite_button) as ImageButton
         addFavoriteButton.setOnClickListener {
-            val newRoom = roomEditText.getText().toString()
-            if (newRoom.length > 0 && !roomList.contains(newRoom)) {
+            val newRoom = roomEditText.text.toString()
+            if (newRoom.isNotEmpty() && !roomList.contains(newRoom)) {
                 adapter.add(newRoom)
                 adapter.notifyDataSetChanged()
             }
@@ -82,7 +89,8 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
     }
 
     private fun connectToRoom(roomIdP: String?, commandLineRun: Boolean, loopback: Boolean,
-                              useValuesFromIntent: Boolean, runTimeMs: Int){
+                              useValuesFromIntent: Boolean, runTimeMs: Int
+    ){
         getRoomConnectionIntent(roomIdP, commandLineRun, loopback, useValuesFromIntent,
                 runTimeMs, this)?.let{
 

@@ -304,7 +304,7 @@ public class PeerConnectionClient {
     this.options = options;
   }
 
-  public void createPeerConnectionFactory(final Context context,
+  public void createPeerConnectionFactory(final Activity context,
       final PeerConnectionParameters peerConnectionParameters, final PeerConnectionEvents events) {
     this.peerConnectionParameters = peerConnectionParameters;
     this.events = events;
@@ -380,8 +380,8 @@ public class PeerConnectionClient {
     return videoCallEnabled;
   }
 
-  private void createPeerConnectionFactoryInternal(Context context) {
-//    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(((Activity) context) ));
+  private void createPeerConnectionFactoryInternal(Activity context) {
+    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(context) );
       PeerConnectionFactory.initializeInternalTracer();
 
     if (peerConnectionParameters.tracing) {
