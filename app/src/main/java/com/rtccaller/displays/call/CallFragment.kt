@@ -1,13 +1,3 @@
-/*
- *  Copyright 2015 The WebRTC Project Authors. All rights reserved.
- *
- *  Use of this source code is governed by a BSD-style license
- *  that can be found in the LICENSE file in the root of the source
- *  tree. An additional intellectual property rights grant can be found
- *  in the file PATENTS.  All contributing project authors may
- *  be found in the AUTHORS file in the root of the source tree.
- */
-
 package com.rtccaller.displays.call
 
 import android.app.Activity
@@ -20,11 +10,8 @@ import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-
 import com.rtccaller.R
-
 import org.webrtc.RendererCommon.ScalingType
-
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_ROOMID
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_VIDEO_CALL
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_VIDEO_CAPTUREQUALITYSLIDER_ENABLED

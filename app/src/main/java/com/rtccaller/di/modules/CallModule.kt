@@ -3,19 +3,17 @@ package com.rtccaller.di.modules
 import android.util.Log
 import com.rtccaller.displays.call.CallActivity2
 import com.rtccaller.displays.call.CallIntentParameters
-import com.rtccaller.di.components.ActivityScope
+import com.rtccaller.di.scopes.ActivityScope
 import com.rtccaller.services.PeerConnectionClient
 import dagger.Module
 import dagger.Provides
 import org.webrtc.PeerConnectionFactory
-import javax.inject.Singleton
 
 @Module
 class CallModule {
 
     companion object {
         private val TAG = CallModule::class.java.simpleName
-        private val BASE_URL = "https://openweathermap.org/"
     }
 
     @Provides
@@ -59,7 +57,7 @@ class CallModule {
         peerConnectionParameters: PeerConnectionClient.PeerConnectionParameters,
         intentParameters: CallIntentParameters
     ): PeerConnectionClient {
-        Log.d(TAG,"aChub getPeerConnectionClient")
+        Log.d(TAG,"getPeerConnectionClient()")
         val peerConnectionClient = PeerConnectionClient.getInstance()
         if (intentParameters.loopback) {
             val options = PeerConnectionFactory.Options()
@@ -71,6 +69,4 @@ class CallModule {
         )
         return peerConnectionClient
     }
-
-
 }

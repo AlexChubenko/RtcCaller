@@ -20,15 +20,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-
-
 import androidx.fragment.app.FragmentTransaction
 import com.rtccaller.R
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_CAMERA2
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_CAPTURETOTEXTURE_ENABLED
 import com.rtccaller.displays.call.CallIntentParameters.Companion.EXTRA_VIDEO_FILE_AS_CAMERA
 import com.rtccaller.services.*
-import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 
 import org.webrtc.*
@@ -128,30 +125,25 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
     private var arePermissionsGranted = false
 
       public override fun onCreate(savedInstanceState: Bundle?) {
-//          AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
-          Log.d(TAG, "aChub onCreate 1")
          //    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(this));
 
             // Set window styles for fullscreen-window size. Needs to be done before
             // adding content.
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-        window.addFlags(
+          requestWindowFeature(Window.FEATURE_NO_TITLE)
+          window.addFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN or WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 //            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 //            or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
-          Log.d(TAG, "aChub onCreate 2")
-         //todo keep this for checking CallActivity visibility
-         //    getWindow().getDecorView().setSystemUiVisibility(getSystemUiVisibility());
             setContentView(R.layout.activity_call)
 
         iceConnected = false
         signalingParameters = null
 
          // Create UI controls.
-            pipRenderer = findViewById<View>(R.id.pip_video_view) as SurfaceViewRenderer
+          pipRenderer = findViewById<View>(R.id.pip_video_view) as SurfaceViewRenderer
         fullscreenRenderer = findViewById<View>(R.id.fullscreen_video_view) as SurfaceViewRenderer
 //        callFragment = CallFragment()
 //        hudFragment = HudFragment()
@@ -164,8 +156,6 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
 
           fullscreenRenderer!!.setOnClickListener(listener)
         remoteRenderers.add(remoteProxyRenderer)
-
-          Log.d(TAG, "aChub onCreate 3")
 
         val intent = intent
 
@@ -187,8 +177,6 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
             }
         }
 
-          Log.d(TAG, "aChub onCreate 4")
-
         fullscreenRenderer!!.init(rootEglBase!!.eglBaseContext, null)
         fullscreenRenderer!!.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
 
@@ -196,26 +184,10 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         pipRenderer.setEnableHardwareScaler(true /* enabled */)
         fullscreenRenderer!!.setEnableHardwareScaler(true /* enabled */)
          // Start with local feed in fullscreen and swap it to the pip when the call is connected.
-            setSwappedFeeds(true /* isSwappedFeeds */)
-
-          Log.d(TAG, "aChub onCreate 5")
-
-         // Check for mandatory permissions.
-//        for (permission in MANDATORY_PERMISSIONS) {
-//            if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-//                Log.d(TAG, "aChub() checkCallingOrSelfPermission $permission")
-//                logAndToast("Permission $permission is not granted")
-//                setResult(RESULT_CANCELED)
-//                finish()
-//                return
-//            }
-//        }
+          setSwappedFeeds(true /* isSwappedFeeds */)
           initFragments(intent)
-          Log.d(TAG, "aChub onCreate 6")
           handlePermissions()
-
          //todo move to delegate
-
     }
 
     private fun prepareCall(){
@@ -414,7 +386,6 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
 
     public override fun onStop() {
         super.onStop()
-        Log.d(TAG, "aChub onStop()")
         activityRunning = false
         // Don't stop the video when using screencapture to allow user to show other apps to the remote
         // end.
@@ -484,33 +455,24 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
     }
 
     private fun startCall() {
-        Log.d(TAG, "aChub startCall 1")
         if (appRtcClient == null) {
-            Log.e(TAG, "AppRTC client is not allocated for a call.")
             return
         }
-        Log.d(TAG, "aChub startCall 2")
         callStartedTimeMs = System.currentTimeMillis()
-        Log.d(TAG, "aChub startCall 3")
         // Start room connection.
         logAndToast(getString(R.string.connecting_to, roomConnectionParameters!!.roomUrl))
-        Log.d(TAG, "aChub startCall 4")
         appRtcClient!!.connectToRoom(roomConnectionParameters)
-        Log.d(TAG, "aChub startCall 5")
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
-        Log.d(TAG, "aChub startCall 6")
         audioManager = AppRTCAudioManager.create(applicationContext)
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(TAG, "Starting the audio manager...")
-        Log.d(TAG, "aChub startCall 7")
         audioManager!!.start { audioDevice, availableAudioDevices ->
             // This method will be called each time the number of available audio
             // devices has changed.
             onAudioManagerDevicesChanged(audioDevice, availableAudioDevices)
         }
-        Log.d(TAG, "aChub startCall 7")
     }
 
     private fun callConnected() {
@@ -764,11 +726,11 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
   override fun onPeerConnectionClosed() {}
 
   override fun onPeerConnectionStatsReady(reports:Array<StatsReport>) {
-    runOnUiThread {
-    if (!isError && iceConnected) {
-        hudFragment!!.updateEncoderStatistics(reports)
-    }
-    }
+      runOnUiThread {
+          if (!isError && iceConnected) {
+            hudFragment!!.updateEncoderStatistics(reports)
+        }
+      }
   }
 
   override fun onPeerConnectionError(description:String) {
