@@ -170,6 +170,9 @@ public class PeerConnectionClient {
       this.protocol = protocol;
       this.negotiated = negotiated;
       this.id = id;
+
+      Log.d(TAG, "aChub DataChannelParameters ordered : "+ordered+", maxRetransmitTimeMs : "+maxRetransmitTimeMs+", maxRetransmits : "+
+              "protocol : "+protocol+", negotiated"+", id : "+id);
     }
   }
 
@@ -239,6 +242,14 @@ public class PeerConnectionClient {
       this.enableLevelControl = enableLevelControl;
       this.disableWebRtcAGCAndHPF = disableWebRtcAGCAndHPF;
       this.dataChannelParameters = dataChannelParameters;
+
+      Log.d(TAG, "aChub PeerConnectionParameters: "+videoCallEnabled+"\n"+loopback+tracing+"\n"+videoWidth
+                      +"\n"+videoHeight+"\n"+videoFps+"\n"+videoMaxBitrate+"\n"+videoCodec+"\n"+videoFlexfecEnabled+"\n"
+                      +videoCodecHwAcceleration+"\n"+audioStartBitrate+"\n"+audioCodec+"\n"+noAudioProcessing+"\n"+
+                      aecDump+"\n"+useOpenSLES+"\n"+disableBuiltInAEC+"\n"
+                      +disableBuiltInAGC+"\n"+disableBuiltInNS+"\n"+enableLevelControl+"\n"+
+                      disableWebRtcAGCAndHPF+"\n"+dataChannelParameters
+              );
     }
   }
 
@@ -331,9 +342,18 @@ public class PeerConnectionClient {
     executor.execute(new Runnable() {
       @Override
       public void run() {
+        Log.d(TAG, "aChub run() createPeerConnectionFactoryInternal before");
         createPeerConnectionFactoryInternal(context);
+        Log.d(TAG, "aChub run() createPeerConnectionFactoryInternal after");
       }
     });
+
+    Log.d(TAG, "aChub createPeerConnectionFactory"
+            +(peerConnectionParameters != null)
+            +(events!=null)
+            +(videoCallEnabled)
+            +(dataChannelEnabled)
+            +"");
   }
 
   public void createPeerConnection(final EglBase.Context renderEGLContext,
@@ -357,8 +377,10 @@ public class PeerConnectionClient {
       @Override
       public void run() {
         try {
+          Log.d(TAG, "aChub run() createPeerConnection before");
           createMediaConstraintsInternal();
           createPeerConnectionInternal(renderEGLContext);
+          Log.d(TAG, "aChub run() createPeerConnection after");
         } catch (Exception e) {
           reportError("Failed to create peer connection: " + e.getMessage());
           throw e;
@@ -381,18 +403,21 @@ public class PeerConnectionClient {
   }
 
   private void createPeerConnectionFactoryInternal(Activity context) {
-    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(context) );
+//    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(context) );
+      Log.d(TAG, "aChub createPeerConnectionFactoryInternal 1");
       PeerConnectionFactory.initializeInternalTracer();
 
     if (peerConnectionParameters.tracing) {
+        Log.d(TAG, "aChub createPeerConnectionFactoryInternal 2");
       PeerConnectionFactory.startInternalTracingCapture(
           Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
           + "webrtc-trace.txt");
     }
+      Log.d(TAG, "aChub createPeerConnectionFactoryInternal 3");
     Log.d(TAG,
         "Create peer connection factory. Use video: " + peerConnectionParameters.videoCallEnabled);
     isError = false;
-
+      Log.d(TAG, "aChub createPeerConnectionFactoryInternal 4");
     // Initialize field trials.
     String fieldTrials = "";
     if (peerConnectionParameters.videoFlexfecEnabled) {
@@ -404,7 +429,7 @@ public class PeerConnectionClient {
       fieldTrials += DISABLE_WEBRTC_AGC_FIELDTRIAL;
       Log.d(TAG, "Disable WebRTC AGC field trial.");
     }
-
+      Log.d(TAG, "aChub createPeerConnectionFactoryInternal 5");
     // Check preferred video codec.
     preferredVideoCodec = VIDEO_CODEC_VP8;
     if (videoCallEnabled && peerConnectionParameters.videoCodec != null) {
@@ -515,6 +540,8 @@ public class PeerConnectionClient {
     }
     factory = new PeerConnectionFactory(options);
     Log.d(TAG, "Peer connection factory created.");
+
+      Log.d(TAG, "aChub createPeerConnectionFactoryInternal 6");
   }
 
   private void createMediaConstraintsInternal() {

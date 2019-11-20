@@ -12,6 +12,7 @@ package com.rtccaller.displays.call
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -127,7 +128,13 @@ class CallFragment : Fragment() {
 
     // TODO(sakal): Replace with onAttach(Context) once we only support API level 23+.
     override fun onAttach(activity: Activity) {
+        Log.d(TAG, "aChub onAttach before")
         super.onAttach(activity)
         callEvents = activity as OnCallEvents
+        Log.d(TAG, "aChub onAttach after")
+    }
+
+    companion object{
+        val TAG = CallFragment::class.java.simpleName
     }
 }

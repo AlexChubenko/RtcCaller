@@ -52,6 +52,7 @@ public class CpuMonitor {
   private int actualCpusPresent;
   private boolean initialized;
   private boolean cpuOveruse;
+  private String[] minPath;
   private String[] maxPath;
   private String[] curPath;
   private double[] curFreqScales;
@@ -203,12 +204,14 @@ public class CpuMonitor {
     }
 
     cpuFreqMax = new long[cpusPresent];
+    minPath = new String[cpusPresent];
     maxPath = new String[cpusPresent];
     curPath = new String[cpusPresent];
     curFreqScales = new double[cpusPresent];
     for (int i = 0; i < cpusPresent; i++) {
       cpuFreqMax[i] = 0; // Frequency "not yet determined".
       curFreqScales[i] = 0;
+      minPath[i] = "/sys/devices/system/cpu/cpu" + i + "/cpufreq/cpuinfo_mix_freq";
       maxPath[i] = "/sys/devices/system/cpu/cpu" + i + "/cpufreq/cpuinfo_max_freq";
       curPath[i] = "/sys/devices/system/cpu/cpu" + i + "/cpufreq/scaling_cur_freq";
     }

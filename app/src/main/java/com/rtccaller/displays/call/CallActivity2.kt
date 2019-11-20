@@ -128,9 +128,10 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
     private var arePermissionsGranted = false
 
       public override fun onCreate(savedInstanceState: Bundle?) {
-          AndroidInjection.inject(this)
+//          AndroidInjection.inject(this)
 
         super.onCreate(savedInstanceState)
+          Log.d(TAG, "aChub onCreate 1")
          //    Thread.setDefaultUncaughtExceptionHandler(new UnhandledExceptionHandler(this));
 
             // Set window styles for fullscreen-window size. Needs to be done before
@@ -141,6 +142,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
 //            or WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 //            or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
+          Log.d(TAG, "aChub onCreate 2")
          //todo keep this for checking CallActivity visibility
          //    getWindow().getDecorView().setSystemUiVisibility(getSystemUiVisibility());
             setContentView(R.layout.activity_call)
@@ -163,6 +165,8 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
           fullscreenRenderer!!.setOnClickListener(listener)
         remoteRenderers.add(remoteProxyRenderer)
 
+          Log.d(TAG, "aChub onCreate 3")
+
         val intent = intent
 
          // Create video renderers.
@@ -171,8 +175,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         pipRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
 
          // When saveRemoteVideoToFile is set we save the video from the remote to a file.
-        if (intentParameters.saveRemoteVideoToFile != null)
-            {
+        if (intentParameters.saveRemoteVideoToFile != null) {
             try {
                 videoFileRenderer = VideoFileRenderer(
                 intentParameters.saveRemoteVideoToFile, intentParameters.videoOutWidth, intentParameters.videoOutHeight, rootEglBase!!.getEglBaseContext())
@@ -183,6 +186,9 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
                     "Failed to open video file for output: " + intentParameters.saveRemoteVideoToFile, e)
             }
         }
+
+          Log.d(TAG, "aChub onCreate 4")
+
         fullscreenRenderer!!.init(rootEglBase!!.eglBaseContext, null)
         fullscreenRenderer!!.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
 
@@ -192,19 +198,28 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
          // Start with local feed in fullscreen and swap it to the pip when the call is connected.
             setSwappedFeeds(true /* isSwappedFeeds */)
 
+          Log.d(TAG, "aChub onCreate 5")
+
          // Check for mandatory permissions.
-        for (permission in MANDATORY_PERMISSIONS) {
-            if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "aChub() checkCallingOrSelfPermission $permission")
-                logAndToast("Permission $permission is not granted")
-                setResult(RESULT_CANCELED)
-                finish()
-                return
-            }
-        }
+//        for (permission in MANDATORY_PERMISSIONS) {
+//            if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+//                Log.d(TAG, "aChub() checkCallingOrSelfPermission $permission")
+//                logAndToast("Permission $permission is not granted")
+//                setResult(RESULT_CANCELED)
+//                finish()
+//                return
+//            }
+//        }
+          initFragments(intent)
+          Log.d(TAG, "aChub onCreate 6")
+          handlePermissions()
 
          //todo move to delegate
-            val roomUri = intent.data
+
+    }
+
+    private fun prepareCall(){
+        val roomUri = intent.data
         if (roomUri == null) {
             logAndToast(getString(R.string.missing_url))
             Log.e(TAG, "Didn't get any URL in intent!")
@@ -212,7 +227,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
             finish()
             return }
 
-         // Get Intent parameters.
+        // Get Intent parameters.
 
         Log.d(TAG, "Room ID: " + intentParameters.roomId)
         if (intentParameters.roomId == null || intentParameters.roomId.isEmpty()) {
@@ -224,38 +239,36 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         }
 
 
-         // If capturing format is not specified for screencapture, use screen resolution.
-          if (screencaptureEnabled && intentParameters.videoWidth == 0 && intentParameters.videoHeight == 0)
+        // If capturing format is not specified for screencapture, use screen resolution.
+        if (screencaptureEnabled && intentParameters.videoWidth == 0 && intentParameters.videoHeight == 0)
         {
-        val displayMetrics = getDisplayMetrics()
-        intentParameters.videoWidth = displayMetrics.widthPixels
-        intentParameters.videoHeight = displayMetrics.heightPixels
+            val displayMetrics = getDisplayMetrics()
+            intentParameters.videoWidth = displayMetrics.widthPixels
+            intentParameters.videoHeight = displayMetrics.heightPixels
         }
 
         Log.d(TAG, "VIDEO_FILE: '" + intent.getStringExtra(EXTRA_VIDEO_FILE_AS_CAMERA) + "'")
 
-         // Create connection client. Use DirectRTCClient if room name is an IP otherwise use the
-            // standard WebSocketRTCClient.
-            if (intentParameters.loopback || !DirectRTCClient.IP_PATTERN.matcher(intentParameters.roomId).matches())
+        // Create connection client. Use DirectRTCClient if room name is an IP otherwise use the
+        // standard WebSocketRTCClient.
+        if (intentParameters.loopback || !DirectRTCClient.IP_PATTERN.matcher(intentParameters.roomId).matches())
         {
-        appRtcClient = WebSocketRTCClient(this)
+            appRtcClient = WebSocketRTCClient(this)
         }
         else
         {
-        Log.i(TAG, "Using DirectRTCClient because room name looks like an IP.")
-        appRtcClient = DirectRTCClient(this)
+            Log.i(TAG, "Using DirectRTCClient because room name looks like an IP.")
+            appRtcClient = DirectRTCClient(this)
         }
-         // Create connection parameters.
-            roomConnectionParameters = AppRTCClient.RoomConnectionParameters(
-                roomUri.toString(), intentParameters.roomId,
-        intentParameters.loopback, intentParameters.urlParameters)
+        // Create connection parameters.
+        roomConnectionParameters = AppRTCClient.RoomConnectionParameters(
+            roomUri.toString(), intentParameters.roomId,
+            intentParameters.loopback, intentParameters.urlParameters)
 
-        initFragments(intent)
-
-         // For command line execution run connection for <runTimeMs> and exit.
-            if (commandLineRun && runTimeMs > 0)
+        // For command line execution run connection for <runTimeMs> and exit.
+        if (commandLineRun && runTimeMs > 0)
         {
-        (Handler()).postDelayed({ disconnect() }, runTimeMs.toLong())
+            (Handler()).postDelayed({ disconnect() }, runTimeMs.toLong())
         }
 
         if (screencaptureEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -271,7 +284,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
         if (!canAccessCamera || !canRecordAudio) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO), CAMERA_AUDIO_PERMISSION_REQUEST)
         } else {
-            arePermissionsGranted = true
+            prepareCall()
         }
     }
 
@@ -282,6 +295,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
                 if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
                     arePermissionsGranted = true
 //                    startVideoSession()
+                    prepareCall()
                 } else {
                     finish()
                 }
@@ -336,6 +350,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
         if (requestCode != CAPTURE_PERMISSION_REQUEST_CODE)
             return
         mediaProjectionPermissionResultCode = resultCode
@@ -399,6 +414,7 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
 
     public override fun onStop() {
         super.onStop()
+        Log.d(TAG, "aChub onStop()")
         activityRunning = false
         // Don't stop the video when using screencapture to allow user to show other apps to the remote
         // end.
@@ -468,27 +484,33 @@ class CallActivity2: DaggerAppCompatActivity()/*, HasSupportFragmentInjector*/, 
     }
 
     private fun startCall() {
+        Log.d(TAG, "aChub startCall 1")
         if (appRtcClient == null) {
             Log.e(TAG, "AppRTC client is not allocated for a call.")
             return
         }
+        Log.d(TAG, "aChub startCall 2")
         callStartedTimeMs = System.currentTimeMillis()
-
+        Log.d(TAG, "aChub startCall 3")
         // Start room connection.
         logAndToast(getString(R.string.connecting_to, roomConnectionParameters!!.roomUrl))
+        Log.d(TAG, "aChub startCall 4")
         appRtcClient!!.connectToRoom(roomConnectionParameters)
-
+        Log.d(TAG, "aChub startCall 5")
         // Create and audio manager that will take care of audio routing,
         // audio modes, audio device enumeration etc.
+        Log.d(TAG, "aChub startCall 6")
         audioManager = AppRTCAudioManager.create(applicationContext)
         // Store existing audio settings and change audio mode to
         // MODE_IN_COMMUNICATION for best possible VoIP performance.
         Log.d(TAG, "Starting the audio manager...")
+        Log.d(TAG, "aChub startCall 7")
         audioManager!!.start { audioDevice, availableAudioDevices ->
             // This method will be called each time the number of available audio
             // devices has changed.
             onAudioManagerDevicesChanged(audioDevice, availableAudioDevices)
         }
+        Log.d(TAG, "aChub startCall 7")
     }
 
     private fun callConnected() {

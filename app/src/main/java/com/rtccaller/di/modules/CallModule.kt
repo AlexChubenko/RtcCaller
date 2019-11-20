@@ -8,6 +8,7 @@ import com.rtccaller.services.PeerConnectionClient
 import dagger.Module
 import dagger.Provides
 import org.webrtc.PeerConnectionFactory
+import javax.inject.Singleton
 
 @Module
 class CallModule {
@@ -58,7 +59,7 @@ class CallModule {
         peerConnectionParameters: PeerConnectionClient.PeerConnectionParameters,
         intentParameters: CallIntentParameters
     ): PeerConnectionClient {
-
+        Log.d(TAG,"aChub getPeerConnectionClient")
         val peerConnectionClient = PeerConnectionClient.getInstance()
         if (intentParameters.loopback) {
             val options = PeerConnectionFactory.Options()

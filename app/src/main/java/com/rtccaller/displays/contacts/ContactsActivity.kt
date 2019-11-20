@@ -1,7 +1,9 @@
 package com.rtccaller.displays.contacts
 
+import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.util.Log
@@ -12,8 +14,11 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.rtccaller.R
+import com.rtccaller.displays.call.CallActivity2
 import com.rtccaller.displays.contacts.ContactsLifecycleDelegate.Companion.getRoomConnectionIntent
 import org.json.JSONArray
 import org.json.JSONException
@@ -96,11 +101,15 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
     private fun connectToRoom(roomIdP: String?, commandLineRun: Boolean, loopback: Boolean,
                               useValuesFromIntent: Boolean, runTimeMs: Int
     ){
-        getRoomConnectionIntent(roomIdP, commandLineRun, loopback, useValuesFromIntent,
-                runTimeMs, this)?.let{
+        connectionIntent = getRoomConnectionIntent(roomIdP, commandLineRun, loopback, useValuesFromIntent,
+                runTimeMs, this)
+        handlePermissions()
+    }
 
-                startActivityForResult(it, CONNECTION_REQUEST)
-            }
+    private var connectionIntent: Intent? = null
+
+    private fun startConnection(){
+        connectionIntent?.let{startActivityForResult(it, CONNECTION_REQUEST)}
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -151,6 +160,35 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
 //        }
 
     }
+
+    private fun handlePermissions() {
+        val canAccessCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        val canRecordAudio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        if (!canAccessCamera || !canRecordAudio) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO),
+                CAMERA_AUDIO_PERMISSION_REQUEST
+            )
+        } else {
+            startConnection()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        Log.w(CallActivity2.TAG, "onRequestPermissionsResult: $requestCode $permissions $grantResults")
+        when (requestCode) {
+            CAMERA_AUDIO_PERMISSION_REQUEST -> {
+                if (grantResults.isNotEmpty() && grantResults.first() == PackageManager.PERMISSION_GRANTED) {
+//                    arePermissionsGranted = true
+//                    startVideoSession()
+                    startConnection()
+                } else {
+                    finish()
+                }
+                return
+            }
+        }
+    }
+
     public override fun onPause() {
         super.onPause()
         //todo check this
@@ -201,6 +239,8 @@ class ContactsActivity : AppCompatActivity(), ContactsLifecycleDelegate.Preferen
 
     companion object{
         private val TAG = ContactsActivity.javaClass.simpleName
+
+        private const val CAMERA_AUDIO_PERMISSION_REQUEST = 11
         private const val CONNECTION_REQUEST = 1
         private val REMOVE_FAVORITE_INDEX = 0
         private var commandLineRun = false
