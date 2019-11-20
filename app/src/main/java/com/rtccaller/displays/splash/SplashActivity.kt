@@ -1,5 +1,6 @@
 package com.rtccaller.displays.splash
 
-import android.app.AppComponentFactory
+import androidx.appcompat.app.AppCompatActivity
 
-class SplashActivity : AppComponentFactory() {}
+
+class SplashActivity : AppCompatActivity() {}
